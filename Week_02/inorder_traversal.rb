@@ -25,8 +25,8 @@ def inorder_traversal1(root)
     result_list = Array.new
     stack = Array.new
     curr = root
-    while curr != nil
-        while curr != nil || !stack.empty?()
+    while curr != nil || !stack.empty?
+        while curr != nil
             stack.push(curr)
             curr = curr.left
         end
