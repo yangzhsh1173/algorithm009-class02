@@ -60,3 +60,36 @@ def preorder_traversal2(root)
     end
     return result_list
 end
+
+# 比较符合前序思路的迭代解法，参考了 https://leetcode-cn.com/problems/binary-tree-preorder-traversal/solution/tu-jie-er-cha-shu-de-si-chong-bian-li-by-z1m/
+def preorder_traversal(root)
+    return [] if root.nil?
+    stack, res = [root], []
+    until stack.empty?
+        node = stack.pop
+        unless node.nil?
+           res << node.val
+           stack << node.right unless node.right.nil? 
+           stack << node.left unless node.left.nil?
+        end
+    end
+    res
+end
+
+# 模板解法（其实更不好理解）
+def preorder_traversal(root)
+    return [] if root.nil?
+    stack, res = [], []
+    node = root
+    until stack.empty? && node.nil?
+        until node.nil?
+            res << node.val
+            stack << node
+            node = node.left
+        end
+        node = stack.pop.right
+    end
+    res
+end
+
+# 参考国际站的解法

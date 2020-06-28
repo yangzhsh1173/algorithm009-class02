@@ -35,3 +35,32 @@ def inorder_traversal1(root)
         curr = curr.right
     end
 end
+
+# 改进的递归实现
+def inorder_traversal(root)
+    return [] if root.nil?
+    res = []
+    res += inorder_traversal(root.left)
+    res << root.val
+    res += inorder_traversal(root.right)
+    res
+end
+
+# 更通用的递归写法（用一个 helper 或者叫 dfs）
+def inorder_traversal(root)
+    res = []
+    helper root, res
+    res
+end
+def helper(root, res)
+    return [] if root.nil?
+    helper root.left, res
+    res << root.val
+    helper root.right, res
+end
+
+# 参考国际站的递归实现
+def inorder_traversal(root)
+    return [] if root == nil
+    return inorder_traversal(root.left) + [root.val] + inorder_traversal(root.right)
+end

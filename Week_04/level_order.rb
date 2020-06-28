@@ -14,15 +14,15 @@ def level_order(root)
     res = []
     queue = [root]
     while !queue.empty?
+        level_results = []
         n = queue.length
-        level_list = []
         n.times do |i|
             node = queue.shift
-            level_list << node.val
-            queue << node.left if node.left != nil
-            queue << node.right if node.right != nil
+            level_results << node.val
+            queue << node.left if node.left
+            queue << node.right if node.right 
         end
-        res << level_list
+        res << level_results
     end
     res
 end
@@ -34,13 +34,13 @@ def level_order(root)
     output
 end
   
-def dfs(node, output, level)
-    return output unless node
+def dfs(root, output, level)
+    return output unless root
 
     output[level] ||= []
     output[level] << node.val
-    dfs node.left, output, level+1
-    dfs node.right, output, level+1
+    dfs root.left, output, level+1
+    dfs root.right, output, level+1
 end
 
 # 参考国际站的解法
