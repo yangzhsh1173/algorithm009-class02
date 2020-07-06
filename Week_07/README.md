@@ -116,8 +116,70 @@ def parent(self, p, i):
 ```
 
 ##高级搜索
+###双向BFS
+代码模板总结如下（Ruby实现）
+
+```
+def two_ended_bfs(begin_word, end_word, word_list)
+    visited, begin_set, end_set = Set.new, Set.new, Set.new
+    visited << begin_word
+    begin_set << begin_word
+    end_set << end_word
+    step = 1
+    while !begin_set.empty? && !end_set.empty?
+        if begin_set.size > end_set.size
+            begin_set, end_set = end_set, begin_set # swap
+        end
+        next_set = Set.new
+        begin_set.each do |word|
+            process word
+            if word_list.include? next_word
+                return step+1 if end_set.include? next_word
+                if !visited.include? next_word
+                    next_set << next_word
+                    visited << next_word
+                end
+            end
+        end
+        begin_set = next_set
+    end
+end
+```
+
+###启发式搜索
 
 ##平衡二叉树
 平衡二叉树有很多种，它的出现是为了解决二叉树退化成链表引起的效率问题。常见的或者说需要我们掌握的是 AVL 树、红黑树、2-3树、B树、B+树等几种。
 
-###AVL
+###AVL树
+AVL树引入了两个概念：
+
+* 平衡因子 balance factor，即左子树的高度减去右子树的高度（或者相反），其取值范围是 {-1, 0, 1}
+* 4种旋转操作：左旋，右旋，左右旋，右左旋，通过旋转操作来达到平衡
+
+右右子树，一次左旋；左左子树，一次右旋；左右子树，左右旋；右左子树，右左旋。
+
+AVL树的由来：因为二叉搜索树的查询效率是树的高度/深度，所以引入了高度差的概念，也就是平衡因子的由来，即我们不希望高度差过大，导致查询效率下降太多。
+
+不足：需要额外存储信息，且调整次数频繁
+
+###红黑树
+一种近似平衡二叉树，能确保任一结点的左右子树高度差小于2倍。它需要满足下面5个性质：
+
+* 每个结点要么是红色，要么是黑色
+* 根结点是黑色
+* 每个叶子结点是黑色且是NIL结点（或者叫空结点）
+* 不能有相邻的两个红色结点
+* 从任一结点到其每个叶子结点的所有路径都包含相同数目的黑色结点
+
+*关键性质：从根结点到叶子结点的最长的可能路径不多于最短的可能路径的两倍长*
+
+###AVL树与红黑树的区别
+* AVL树有更高的查询效率，原因是它是更加严格平衡的
+* 红黑树平均有更高的插入删除效率，因为它有更少的旋转操作（只需要近似平衡即可）
+* AVL树需要存储更多的额外信息（factor，height），需要更多的存储空间（an integer per node），而红黑树只需要 1 bit per node（表示黑或者红）
+* 红黑树更多应用在一些高级语言的库（如 map，set），AVL树应用在 database
+
+也就是说，红黑树更多适用于有比较频繁的写操作（插入删除），而AVL树更多适用于需要大量读操作而很少的写操作的场景
+
+
